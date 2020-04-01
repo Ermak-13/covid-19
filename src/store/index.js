@@ -69,7 +69,6 @@ export default new Vuex.Store({
             }
           })
         });
-        console.log(preparedData);
 
         commit('setCovid19Data', preparedData);
       });
