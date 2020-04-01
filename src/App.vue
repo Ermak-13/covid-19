@@ -1,32 +1,94 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
+  <div class="app">
+    <nav class="nav app__nav">
+      <ul class="nav__list">
+        <li class="nav__item">
+          <router-link
+            class="nav__link"
+            to="/">World</router-link>
+        </li>
+        <li class="nav__item">
+          <router-link
+            class="nav__link"
+            to="/by-country">By Country</router-link>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="app__content">
+      <router-view v-if="$store.state.isReady" />
     </div>
-    <router-view/>
   </div>
 </template>
 
+<script>
+export default {
+  name: 'App',
+
+  created () {
+    this.$store.dispatch('loadCovid19Data')
+  }
+}
+</script>
+
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
+:root {
+  --primary-color: #000000;
+  --secodary-color: #ffffff;
+  --accent-color: red;
 }
 
-#nav {
-  padding: 30px;
+html, body {
+  height: 100%;
+  font-family: 'Roboto', sans-serif;
+  font-size: 18px;
 }
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+.app {
+  display: grid;
+  grid-template-columns: 250px auto;
+  height: 100%;
+
+  background-color: var(--secodary-color);
+  color: var(--primary-color);
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
+.app__nav {
+  background-color: var(--primary-color);
+  color: var(--secodary-color);
+  padding: 10px 0;
+}
+
+.app__content {
+  padding: 25px;
+}
+
+.nav__list {
+  list-style: none;
+  padding-left: 0;
+  margin: 0;
+}
+
+.nav__link {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 20px;
+
+  color: inherit;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 2.5px;
+  transition: color 0.5s ease;
+}
+
+.nav__link:hover {
+  color: var(--accent-color);
+}
+
+.widget {
+  padding: 15px;
+  border: solid 1px var(--primary-color);
+  background-color: var(--secondar-color);
+  color: var(--primary-color);
 }
 </style>
