@@ -1,6 +1,8 @@
 <template>
   <div class="app">
     <nav class="nav app__nav">
+      <h1 class="nav__h">Covid-19</h1>
+
       <ul class="nav__list">
         <li class="nav__item">
           <router-link
@@ -11,6 +13,11 @@
           <router-link
             class="nav__link"
             to="/by-country">By Country</router-link>
+        </li>
+        <li>
+          <router-link
+            class="nav__link"
+            to="/compare">Compare</router-link>
         </li>
       </ul>
     </nav>
@@ -61,6 +68,11 @@ html, body {
 
 .app__content {
   padding: 25px;
+}
+
+.nav__h {
+  padding: 0 20px;
+  opacity: 0.75;
 }
 
 .nav__list {

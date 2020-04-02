@@ -17,6 +17,7 @@ export default new Vuex.Store({
     },
 
     getCovid19DataByCountry: (state) => (country) => {
+      console.log(country)
       return state.covid19Data[country];
     },
 
@@ -56,22 +57,23 @@ export default new Vuex.Store({
 
   actions: {
     loadCovid19Data ({ commit }) {
-      fetch('https://pomber.github.io/covid19/timeseries.json')
-      .then(response => response.json())
-      .then(data => {
-        const preparedData = {}
-        Object.entries(data).forEach(([country, countryData]) => {
-          preparedData[country] = countryData.map((dayData) => {
-            return {
-              ...dayData,
-              active: active(dayData),
-              date: new Date(dayData.date)
-            }
-          })
-        });
+      return fetch('https://pomber.github.io/covid19/timeseries.json')
+        .then(response => response.json())
+        .then(data => {
+          const preparedData = {}
+          Object.entries(data).forEach(([country, countryData]) => {
+            preparedData[country] = countryData.map((dayData) => {
+              return {
+                ...dayData,
+                active: active(dayData),
+                date: new Date(dayData.date)
+              }
+            })
+          });
 
-        commit('setCovid19Data', preparedData);
-      });
+          console.log(preparedData);
+          commit('setCovid19Data', preparedData);
+        });
     }
   },
 

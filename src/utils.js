@@ -71,6 +71,28 @@ export function config(...keys) {
   return result;
 }
 
+export function multiCovidLineChartData(dataOfCountries) {
+  const firstData = Object.values(dataOfCountries)[0] || [];
+  const labels = firstData.map(_data => formatDate(_data.date));
+
+  const datasets = [];
+  Object.entries(dataOfCountries).forEach(([country, dataOfCountry]) => {
+    config('covid_metrics').forEach((metric) => {
+      datasets.push({
+        label: `${country} - ${config(metric, 'title')}`,
+        borderColor: randomColor(),
+        data: dataOfCountry.map(_data => _data[metric]),
+        backgroundColor: 'transparent'
+      });
+    });
+  });
+
+  return {
+    labels: labels,
+    datasets: datasets
+  };
+}
+
 export function covidLineChartData(data) {
   const labels = data.map(_data => formatDate(_data.date))
   const datasets = config('covid_metrics').map(metric => {
@@ -108,7 +130,41 @@ export function covidRadarChartData(data) {
   };
 }
 
+export function multiCovidRadarChartData(dataOfCountries) {
+  const labels = config('covid_metrics');
+  const datasets = Object.entries(dataOfCountries).map(([country, dataOfCountry]) => {
+    const color = randomColor()
+    return {
+      label: country,
+      borderColor: color,
+      backgroundColor: transparencyColor(color, '50%'),
+      data: labels.map(metric => {
+        const last = dataOfCountry[dataOfCountry.length - 1];
+        return last[metric];
+      })
+    };
+  });
+
+  return {
+    labels: labels,
+    datasets: datasets
+  };
+}
+
 // active covid-19
 export function active(data) {
   return (data.confirmed - (data.deaths + data.recovered));
+}
+
+export function randomColor() {
+  const color = Math.floor(Math.random() * 16777215).toString(16);
+  return `#${color}`;
+}
+
+export function transparencyColor(hex, opacity){
+  const _hex = hex.replace('#','');
+  const r = parseInt(_hex.substring(0,2), 16);
+  const g = parseInt(_hex.substring(2,4), 16);
+  const b = parseInt(_hex.substring(4,6), 16);
+  return `rgba(${r}, ${g}, ${b}, ${ parseInt(opacity) / 100 })`;
 }

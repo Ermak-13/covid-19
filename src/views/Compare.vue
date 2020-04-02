@@ -2,22 +2,22 @@
   <div class="page">
     <div class="page__header">
       <multiselect
-        v-model="country"
+        v-model="countries"
         :options="$store.getters.countries"
-        :close-on-select="true"
-        :multiple="false">
+        :close-on-select="false"
+        :multiple="true">
       </multiselect>
     </div>
 
     <dashboard
       class="page__content"
-      :covid19Data="covid19Data" />
+      :covid19DataOfCountries="covid19DataOfCountries" />
   </div>
 </template>
 
 <script>
 import Multiselect from 'vue-multiselect';
-import Dashboard from '@/components/Dashboard.vue';
+import Dashboard from '@/components/MutliDashboard.vue';
 
 export default {
   name: 'Index',
@@ -28,14 +28,19 @@ export default {
 
   data() {
     return {
-      country: 'Belarus'
-    }
+      countries: []
+    };
   },
 
   computed: {
-    covid19Data() {
-      return this.$store.getters.getCovid19DataByCountry(this.country);
-    },
+    covid19DataOfCountries() {
+      const result = {};
+      this.countries.forEach((country) => {
+        result[country] = this.$store.getters.getCovid19DataByCountry(country);
+      });
+
+      return result;
+    }
   }
 }
 </script>
